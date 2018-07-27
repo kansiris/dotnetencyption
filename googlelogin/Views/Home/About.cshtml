@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+
+@using (Html.BeginForm("updateprofile", "Home", FormMethod.Post))
+{
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <label>Name</label>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="form-group">
+            <input type="text" id="phone" name="phone" class="form-control" value="@ViewBag.Name">
+        </div>
+    </div>
+</div><div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <label>phone</label>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="form-group">
+            <input type="text" id="fname" phone="fname" class="form-control" value="@ViewBag.Name">
+        </div>
+    </div>
+</div><div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <label>age</label>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="form-group">
+            <input type="text" id="email" name="email" class="form-control" value="@ViewBag.Name">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-sm-offset-5 col-md-offset-5">
+        <button type="submit" id="submit" class="btn btn-default">Save</button>
+    </div>
+</div>
+}
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script>
+    $('#contactbutton').on('click', function () {
+        var phone = $("#txtphone").val();
+        var fname = $("#txtfname").val();
+        var altmobile = $("#txtaltmobile").val();
+        $.ajax({
+            url: '/Home/updateprofile',
+            type: 'POST',
+            data: JSON.stringify({ phone: phone, fname: fname, altmobile: altmobile }),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data == "success") {
+                    $("body").overhang({
+                        type: "success",
+                        message: "Profile Updated Successfully.",
+                        //closeConfirm: "false",
+                        duration: 5,
+                        overlay: true
+                    });
+                    location.reload();
+                }
+                else {
+                    alert("not updated");
+                }
+            },
+            error: function (data)
+            { alert("Failed!!!"); }
+        });
+
+    });
+    </script>

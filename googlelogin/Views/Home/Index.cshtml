@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h3>Login Using External Provider</h3>
+@using googlelogin.Helpers
+@Html.EncodedActionLink("QuestionText", "urlen", "Home", new { ks = @ViewBag.ksid }, null)
+
+@*@Html.ActionLink("Login Using Google", "RedirectToGoogle")*@
+
+
+
+@*<style type="text/css">
+    #social-buttons {
+        position: fixed;
+        bottom: 15%;
+        margin-left: -721px;
+        float: left;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        background-color: #fff;
+        padding: 0 0 2px 0;
+        z-index: 10;
+    }
+
+        #social-buttons .button-share {
+            float: left;
+            clear: both;
+            margin: 5px 5px 0 2px;
+        }
+</style>
+<div id='social-buttons' title="Get this from helplogger.blogspot.com">
+    <div class='button-share' id='like' style='margin-left:7px;'>
+        <div id="fb-root"></div>
+        <script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-send="false" data-layout="box_count" data-width="40" data-show-faces="false"></div>
+    </div>
+    <br /><div class='sbutton' style="margin-left: 2px;">
+        <a class='twitter-share-button' data-count='vertical' data-via='Helplogger' expr:data-counturl='data:blog.url' href='http://twitter.com/share' rel='nofollow'>Tweet</a>
+        <script src='http://platform.twitter.com/widgets.js' ; type='text/javascript'></script>
+        <br />
+        <div class='button-share' style="margin-left: 3px;" id='su'>
+            <script src="http://www.stumbleupon.com/hostedbadge.php?s=5"></script>
+        </div>
+        <div class='button-share' id='digg' style='margin-left:3px;width:48px'>
+            <script src='http://widgets.digg.com/buttons.js' type='text/javascript'></script>
+            <a class="DiggThisButton DiggMedium"></a>
+        </div>
+        <div class='button-share' style='margin-left:3px;' id='gplusone'>
+            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+            <g:plusone size="tall"></g:plusone>
+        </div>
+        <div style="clear: both;font-size: 9px;text-align:center;">Get <a style="color: #3399BB;" href="http://helplogger.blogspot.com/">widget</a></div>
+    </div>
+</div>*@
+
+
+<style>
+    .list-inline {
+    list-style: outside none none;
+    margin-left: -5px;
+    padding-left: 0;
+}
+
+.list-inline > li {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.social {
+  background: url('http://arunendapally.com/themes/CustomTheme/ss.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  background-repeat: no-repeat;
+}
+
+.facebook {
+  background-position: -0px -0px;
+}
+
+.linkedin {
+  background-position: -0px -42px;
+}
+
+.twitter {
+  background-position: -0px -84px;
+}
+
+.social span {
+    display: inline-block;
+    line-height: 32px;
+    padding-left: 36px;
+    vertical-align: middle;
+}
+
+li {
+    margin-right: 5px;
+    width: 60px;
+}
+    </style>
+
+@*<a href=https://facebook.com/sharer.php?u ={@Request.Url.AbsoluteUri} target="_blank">Facebook</a>
+<a href=http://www.linkedin.com/shareArticle?mini =true&url ={URL}&title ={Title} target="_blank">LinkedIn</a>
+<a href=https://twitter.com/intent/tweet?url ={URL}&text ={Title}&via ={UserName}&hashtags ={HashTags} target="_blank">Twitter</a>
+<a href=https://plus.google.com/share?url ={URL} target="_blank">Google+</a>*@
+
+<ul class="list-inline showShareCount" url="@Request.Url.AbsoluteUri">
+    <li>
+        <a target="_blank" href=https://facebook.com/sharer.php?u= {@Request.Url.AbsoluteUri} class="social facebook"></a>
+    </li>
+    <li>
+        <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=@Request.Url.AbsoluteUri&amp;title=Protect your source code from decompiling or reverse engineering" class="social linkedin"></a>
+    </li>
+    <li>
+        <a target="_blank" href="https://twitter.com/intent/tweet?url=@Request.Url.AbsoluteUri&amp;text=Protect your source code from decompiling or reverse engineering&amp;via=arunendapally" class="social twitter"></a>
+    </li>
+    <li>
+        <a href=https://plus.google.com/share?url=@Request.Url.AbsoluteUri target="_blank" class="prettySocial fa fa-google-plus">google</a>
+    </li>
+</ul>
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $(".facebook").html("<span>0</span>");
+        $(".linkedin").html("<span>0</span>");
+        $(".twitter").html("<span>0</span>");
+
+        var url = $(".showShareCount").attr("url");
+
+        $.getJSON('https://graph.facebook.com/?id=' + url, function (result) {
+            $(".facebook").html("<span>" + result.shares + "</span>");
+        });
+
+        $.getJSON('https://www.linkedin.com/countserv/count/share?url=' + url + '&callback=?', function (result) {
+            $(".linkedin").html("<span>" + result.count + "</span>");
+        });
+
+        $.getJSON('https://cdn.api.twitter.com/1/urls/count.json?url=' + url + '&callback=?', function (result) {
+            $(".twitter").html("<span>" + result.count + "</span>");
+        });
+
+    });
+
+
+
+
+   
+    </script>
